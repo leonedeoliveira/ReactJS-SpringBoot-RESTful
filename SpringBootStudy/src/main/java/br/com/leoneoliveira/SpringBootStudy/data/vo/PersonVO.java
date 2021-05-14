@@ -1,4 +1,4 @@
-package br.com.leoneoliveira.SpringBootStudy.vo;
+package br.com.leoneoliveira.SpringBootStudy.data.vo;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,7 +8,7 @@ public class PersonVO implements Serializable {
 
     private static final long serialVersionUID = -3298455891319577617L;
 
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String address;
@@ -17,11 +17,11 @@ public class PersonVO implements Serializable {
     public PersonVO() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

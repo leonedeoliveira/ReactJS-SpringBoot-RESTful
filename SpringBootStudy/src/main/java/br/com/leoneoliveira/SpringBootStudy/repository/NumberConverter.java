@@ -1,4 +1,4 @@
-package br.com.leoneoliveira.SpringBootStudy.converts;
+package br.com.leoneoliveira.SpringBootStudy.repository;
 
 public class NumberConverter {
 

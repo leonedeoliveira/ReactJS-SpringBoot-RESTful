@@ -6,7 +6,7 @@ import br.com.leoneoliveira.SpringBootStudy.data.vo.PersonVO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MocksPerson {
+public class MockPerson {
 
     public Person mockEntity() {
         return mockEntity(0);

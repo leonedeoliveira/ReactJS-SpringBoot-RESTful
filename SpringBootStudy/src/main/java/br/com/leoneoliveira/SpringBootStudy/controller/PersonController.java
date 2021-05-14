@@ -1,66 +1,56 @@
 package br.com.leoneoliveira.SpringBootStudy.controller;
 
-import br.com.leoneoliveira.SpringBootStudy.converts.NumberConverter;
-import br.com.leoneoliveira.SpringBootStudy.exception.UnsupportedMathOperationException;
-import br.com.leoneoliveira.SpringBootStudy.math.SimpleMath;
+import br.com.leoneoliveira.SpringBootStudy.data.model.Person;
+import br.com.leoneoliveira.SpringBootStudy.data.vo.PersonVO;
+import br.com.leoneoliveira.SpringBootStudy.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-public class MathControler {
+@RequestMapping("/person")
+public class PersonController {
 
     @Autowired
-    SimpleMath math;
+    private PersonService service;
 
-    @RequestMapping(value = "/sum/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double greeting(@PathVariable("numberOne") String numberOne,
-                           @PathVariable("numberTwo") String numberTwo) {
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.sum(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    public PersonController(PersonService services) {
+        this.service = services;
     }
 
-    @RequestMapping(value="/subtraction/{numberOne}/{numberTwo}", method=RequestMethod.GET)
-    public Double subtraction(@PathVariable("numberOne") String numberOne, @PathVariable("numberTwo") String numberTwo) throws Exception {
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.subtraction(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
-    }
-    @RequestMapping(value="/multiplication/{numberOne}/{numberTwo}", method=RequestMethod.GET)
-    public Double multiplication(@PathVariable("numberOne") String numberOne, @PathVariable("numberTwo") String numberTwo) throws Exception {
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.multiplication(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @GetMapping
+    public ResponseEntity<?> findAll() {
+        List<PersonVO> entityList = this.service.findAll();
+        return new ResponseEntity<List>(entityList, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/division/{numberOne}/{numberTwo}", method=RequestMethod.GET)
-    public Double division(@PathVariable("numberOne") String numberOne, @PathVariable("numberTwo") String numberTwo) throws Exception {
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.division(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        PersonVO entity = this.service.findById(id);
+        return new ResponseEntity<PersonVO>(entity, HttpStatus.OK);
     }
 
-
-    @RequestMapping(value="/mean/{numberOne}/{numberTwo}", method=RequestMethod.GET)
-    public Double mean(@PathVariable("numberOne") String numberOne, @PathVariable("numberTwo") String numberTwo) throws Exception {
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.mean(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<?> create(@RequestBody PersonVO PersonVO) {
+        PersonVO entity = this.service.create(PersonVO);
+        return new ResponseEntity<PersonVO>(entity, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/squareRoot/{number}", method=RequestMethod.GET)
-    public Double squareRoot(@PathVariable("number") String number) throws Exception {
-        if (!NumberConverter.isNumeric(number)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return math.squareRoot(NumberConverter.convertToDouble(number));
+    @PutMapping()
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<?> update(@RequestBody PersonVO PersonVO) {
+        PersonVO entity = this.service.update(PersonVO);
+        return new ResponseEntity<PersonVO>(entity, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        this.service.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

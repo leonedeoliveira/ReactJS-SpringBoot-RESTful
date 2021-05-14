@@ -1,4 +1,4 @@
-package br.com.leoneoliveira.SpringBootStudy.model;
+package br.com.leoneoliveira.SpringBootStudy.data.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ public class Person implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
@@ -23,17 +23,17 @@ public class Person implements Serializable {
     @Column(nullable = false, length = 100)
     private String address;
 
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false, length = 10)
     private String gender;
 
     public Person() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
