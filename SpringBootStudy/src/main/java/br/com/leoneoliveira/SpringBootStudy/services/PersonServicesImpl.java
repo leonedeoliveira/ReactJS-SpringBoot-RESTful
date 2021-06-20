@@ -5,20 +5,21 @@ import br.com.leoneoliveira.SpringBootStudy.data.model.Person;
 import br.com.leoneoliveira.SpringBootStudy.data.vo.PersonVO;
 import br.com.leoneoliveira.SpringBootStudy.exception.ResourceNotFoundException;
 import br.com.leoneoliveira.SpringBootStudy.repository.interfaces.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
-public class PersonServicesImpl implements PersonService{
+public class PersonServicesImpl implements PersonService {
 
     @Autowired
     PersonRepository repository;
-
-    public PersonServicesImpl(PersonRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public PersonVO create(PersonVO person) {
@@ -29,7 +30,7 @@ public class PersonServicesImpl implements PersonService{
 
     @Override
     public PersonVO update(PersonVO person) {
-        return repository.findById(person.getId())
+        return repository.findById(person.getKey())
                 .map(entity -> {
                     entity.setFirstName(person.getFirstName());
                     entity.setLastName(person.getLastName());
@@ -53,7 +54,28 @@ public class PersonServicesImpl implements PersonService{
     }
 
     @Override
-    public List<PersonVO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), PersonVO.class);
+    public Page<PersonVO> findAll(Pageable pageable) {
+        var page = repository.findAll(pageable);
+        return page.map(this::convertPersonVO);
+    }
+
+    @Transactional
+    @Override
+    public PersonVO disablePerson(Long id) {
+        repository.disablePersons(id);
+
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No Records found for this ID"));
+        return DozerConverter.parseObject(entity, PersonVO.class);
+
+    }
+
+    @Override
+    public Page<PersonVO> findPersonByName(String firstName, Pageable pageable) {
+        var page = repository.findPersonByName(firstName, pageable);
+        return page.map(this::convertPersonVO);
+    }
+
+    private PersonVO convertPersonVO(Person entity) {
+        return  DozerConverter.parseObject(entity, PersonVO.class);
     }
 }
