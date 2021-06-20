@@ -39,7 +39,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         try {
             if (fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+                throw new FileStorageException(String.format("Sorry! Filename contains invalid path sequence {0}", fileName));
             }
 
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -47,7 +47,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
             return fileName;
         } catch (Exception e) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", e);
+            throw new FileStorageException(String.format("Could not store file {0}. Please try again!", fileName), e);
         }
     }
 
@@ -59,11 +59,10 @@ public class FileStorageServiceImpl implements FileStorageService {
             if (resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
+                throw new MyFileNotFoundException(String.format("File not fount {0}", fileName));
             }
         } catch (Exception e) {
-            throw new MyFileNotFoundException("File not found " + fileName, e);
+            throw new MyFileNotFoundException(String.format("File not fount {0}", fileName), e);
         }
-
     }
 }
