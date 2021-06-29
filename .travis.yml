@@ -1,0 +1,17 @@
+language: bash
+services: docker
+  - cd E:\ReactJS-SpringBoot-RESTfull
+  - echo "We are in the Docker folder!"
+script:
+  - docker-compose build 
+before_deply:
+  - echo "${DOCKER_PASSWORD}" || docker login --username "${DOCKER_USERNAME}" --password-stdin 
+deploy:
+  provider: script 
+  script: 
+    docker push leoneoliveira/mysql-rest-with-spring-boot;
+    docker push leoneoliveira/rest-with-spring-boot;
+  on: 
+    branch: master
+notification:
+  email: false
