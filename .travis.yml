@@ -5,7 +5,7 @@ services: docker
 script:
   - docker-compose build 
 before_deply:
-  - echo "${DOCKER_PASSWORD}" || docker login --username "${DOCKER_USERNAME}" --password-stdin 
+  - echo "${DOCKER_PASSWORD}" || docker login --username "${DOCKER_USERNAME}" --password-stdin
 deploy:
   provider: script 
   script: 
