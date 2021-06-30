@@ -1,7 +1,7 @@
 language: bash
 services: docker
 before_install:
-  - cd ReactJS-SpringBoot-RESTfull/
+  - cd ReactJS-SpringBoot-RESTfull
   - echo "We are in the Docker folder!!!"
 script:
   - docker-compose build
